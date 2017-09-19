@@ -5,9 +5,15 @@ const http = require('http');
 
 const githubServer = http.createServer((req, res) => {
     if (req.method === 'POST') {
-        res.end("I'm a POST request!");
+        let body = ''
+        req.on('data', d => {
+            body += d
+        });
+        req.on('end', () => {
+        const username = qs.parse(body).username;
+        res.end(username)
+    });
     }
-    res.end("Danger, not a POST request");
 });
 
 githubServer.listen(8080, () => console.log('Listening on 8080'));
